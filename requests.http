@@ -2,12 +2,33 @@ POST http://localhost:8080/pizzas HTTP/1.1
 content-type: application/json
 
 {
-    "nome": "Pizza de Nutella",
-    "preco": 55.9
+    "nome": "Pizza de Mussarela",
+    "preco": 25.99
 }
 
 ###
 GET http://localhost:8080/pizzas HTTP/1.1
 
 ###
-GET http://localhost:8080/pizzas/4 HTTP/1.1
+GET http://localhost:8080/pizzas/5 HTTP/1.1
+
+###
+DELETE  http://localhost:8080/pizzas/3 HTTP/1.1
+
+###
+PUT http://localhost:8080/pizzas/3 HTTP/1.1
+content-type: application/json
+
+{
+    "nome": "Pizza Quatro Queijos",
+    "preco": -20.99
+}
+
+###
+POST http://localhost:8080/pizzas/1/review HTTP/1.1
+content-type: application/json
+
+{
+    "rating": -10,
+    "comment": "Pizza sem graça"
+}

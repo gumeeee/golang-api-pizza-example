@@ -7,7 +7,7 @@ import (
 
 func ValidatePizzaPrice(pizza *models.Pizza) error {
 	if pizza.Preco <= 0 {
-		return errors.New("Price must be greater than zero")
+		return errors.New("price must be greater than zero")
 	}
 
 	return nil
