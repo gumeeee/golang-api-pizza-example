@@ -74,16 +74,63 @@ func getPizzasById(c *gin.Context) {
 }
 
 func deletePizzaById(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Pizza deleted successfully",
-		"method":  "DELETE",
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	for i, pizza := range pizzas {
+		if pizza.ID == id {
+			pizzas = append(pizzas[:i], pizzas[1+i:]...)
+			savePizzas()
+
+			c.JSON(200, gin.H{
+				"message": "Pizza deleted successfully",
+			})
+			return
+		}
+	}
+
+	c.JSON(404, gin.H{
+		"message": "Pizza not found",
 	})
 }
 
 func updatePizzaById(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Pizza updated successfully",
-		"method":  "PUT",
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	var updatedPizza models.Pizza
+	if err := c.ShouldBindJSON(&updatedPizza); err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	for i, pizza := range pizzas {
+		if pizza.ID == id {
+			pizzas[i] = updatedPizza
+			pizzas[i].ID = id
+			savePizzas()
+
+			c.JSON(200, pizzas[i])
+			return
+		}
+	}
+
+	c.JSON(404, gin.H{
+		"message": "Pizza not found to update",
 	})
 }
 
